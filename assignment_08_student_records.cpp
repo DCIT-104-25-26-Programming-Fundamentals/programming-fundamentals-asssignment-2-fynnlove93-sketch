@@ -83,3 +83,75 @@
 #include <iomanip>
 using namespace std;
 
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+struct Student {
+    string name;
+    int id;
+    vector<double> scores;
+};
+
+double getAverage(Student &s) {
+    double sum = 0;
+    for (double sc : s.scores) sum += sc;
+    return s.scores.empty() ? 0 : sum / s.scores.size();
+}
+
+void addStudent(vector<Student> &students) {
+    Student s;
+    cout << "Student name: "; cin.ignore(); getline(cin, s.name);
+    cout << "Student ID: "; cin >> s.id;
+    int n;
+    cout << "How many scores? "; cin >> n;
+    for (int i = 0; i < n; i++) {
+        double sc;
+        cout << "Enter score " << i+1 << ": "; cin >> sc;
+        s.scores.push_back(sc);
+    }
+    students.push_back(s);
+    cout << "Student \"" << s.name << "\" added successfully.\n";
+}
+
+void displayAll(vector<Student> &students) {
+    if (students.empty()) { cout << "No students added yet.\n"; return; }
+    for (Student &s : students) {
+        cout << "Name: " << s.name << " | ID: " << s.id << " | Scores: ";
+        for (double sc : s.scores) cout << sc << " ";
+        cout << fixed << setprecision(2) << "| Average: " << getAverage(s) << endl;
+    }
+}
+
+void findAverage(vector<Student> &students) {
+    int id;
+    cout << "Enter student ID: "; cin >> id;
+    for (Student &s : students) {
+        if (s.id == id) {
+            cout << fixed << setprecision(2) << s.name << "'s average score: " << getAverage(s) << endl;
+            return;
+        }
+    }
+    cout << "Error: Student ID not found.\n";
+}
+
+int main() {
+    vector<Student> students;
+    int choice;
+    do {
+        cout << "\n================================\n";
+        cout << "   STUDENT RECORD SYSTEM MENU\n";
+        cout << "================================\n";
+        cout << "1. Add student\n2. Display all students\n3. Calculate average score\n4. Quit\n";
+        cout << "Enter your choice (1-4): "; cin >> choice;
+
+        if (choice == 1) addStudent(students);
+        else if (choice == 2) displayAll(students);
+        else if (choice == 3) findAverage(students);
+        else if (choice != 4) cout << "Invalid choice.\n";
+    } while (choice != 4);
+
+    return 0;
+}

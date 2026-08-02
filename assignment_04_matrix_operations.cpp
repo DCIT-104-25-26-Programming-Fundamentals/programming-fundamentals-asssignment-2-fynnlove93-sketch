@@ -65,3 +65,76 @@
 #include <string>
 using namespace std;
 
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+void readMat(int m[10][10], int r, int c) {
+    for (int i = 0; i < r; i++)
+        for (int j = 0; j < c; j++) {
+            cout << "Enter element [" << i << "][" << j << "]: ";
+            cin >> m[i][j];
+        }
+}
+
+void printMat(int m[10][10], int r, int c) {
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) cout << setw(5) << m[i][j];
+        cout << endl;
+    }
+}
+
+void transpose(int a[10][10], int r, int c, int t[10][10]) {
+    for (int i = 0; i < r; i++)
+        for (int j = 0; j < c; j++)
+            t[j][i] = a[i][j];
+}
+
+void add(int a[10][10], int b[10][10], int r, int c, int s[10][10]) {
+    for (int i = 0; i < r; i++)
+        for (int j = 0; j < c; j++)
+            s[i][j] = a[i][j] + b[i][j];
+}
+
+void multiply(int a[10][10], int b[10][10], int m, int n, int p, int prod[10][10]) {
+    for (int i = 0; i < m; i++)
+        for (int j = 0; j < p; j++) {
+            prod[i][j] = 0;
+            for (int k = 0; k < n; k++)
+                prod[i][j] += a[i][k] * b[k][j];
+        }
+}
+
+int main() {
+    int a[10][10], b[10][10], r[10][10];
+    int m, n, p;
+
+    cout << "Enter rows and columns of A: ";
+    cin >> m >> n;
+    readMat(a, m, n);
+
+    cout << "\nOriginal Matrix:\n";
+    printMat(a, m, n);
+
+    transpose(a, m, n, r);
+    cout << "\nTransposed Matrix:\n";
+    printMat(r, n, m);
+
+    cout << "\nEnter Matrix B (same size as A) rows and columns: ";
+    cin >> m >> n;
+    readMat(b, m, n);
+
+    add(a, b, m, n, r);
+    cout << "\nSum Matrix:\n";
+    printMat(r, m, n);
+
+    cout << "\nEnter columns of B for multiplication (rows = columns of A): ";
+    cin >> p;
+    readMat(b, n, p);
+
+    multiply(a, b, m, n, p, r);
+    cout << "\nProduct Matrix:\n";
+    printMat(r, m, p);
+
+    return 0;
+}
